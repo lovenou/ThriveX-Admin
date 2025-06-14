@@ -135,11 +135,11 @@ export default () => {
     const [state, setState] = useState<ChartOneState>({
         series: [
             {
-                name: '访客数量',
+                name: '浏览量',
                 data: [],
             },
             {
-                name: 'IP数量',
+                name: '访客',
                 data: [],
             },
         ],
@@ -266,7 +266,7 @@ export default () => {
     // 当数据发生变化时，更新图表选项和状态
     useEffect(() => {
         setLoading(true)
-        
+
         setOptions((data) => ({
             ...data,
             xaxis: { ...options.xaxis, categories: scopeData.categories || [] }
@@ -276,11 +276,11 @@ export default () => {
             ...prevState,
             series: [
                 {
-                    name: '访客数量',
+                    name: '浏览量',
                     data: scopeData.series[0] || 0,
                 },
                 {
-                    name: 'IP数量',
+                    name: '访客',
                     data: scopeData.series[1] || 0,
                 },
             ],
@@ -307,7 +307,7 @@ export default () => {
     };
 
     return (
-        <div className="col-span-12 rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+        <div className="col-span-12 rounded-2xl border border-stroke px-5 pt-7.5 pb-5 shadow-default dark:border-transparent bg-light-gradient dark:bg-dark-gradient sm:px-7.5 xl:col-span-8">
             <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
                 <div className="flex w-full flex-wrap gap-3 sm:gap-5">
                     <div className="flex min-w-47.5">
