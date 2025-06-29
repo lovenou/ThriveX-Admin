@@ -6,6 +6,7 @@ import CardDataStats from "@/components/CardDataStats"
 
 import { AiOutlineEye, AiOutlineMeh, AiOutlineStock, AiOutlineFieldTime } from "react-icons/ai";
 import dayjs from 'dayjs';
+import { getStatisAPI } from "@/api/Statis";
 
 export default () => {
     const [loading, setLoading] = useState(false)
@@ -34,12 +35,8 @@ export default () => {
         try {
             setLoading(true)
 
-            const siteId = import.meta.env.VITE_BAIDU_TONGJI_SITE_ID;
-            const token = import.meta.env.VITE_BAIDU_TONGJI_ACCESS_TOKEN;
-
-            const response = await fetch(`/baidu/rest/2.0/tongji/report/getData?access_token=${token}&site_id=${siteId}&start_date=${date}&end_date=${date}&metrics=pv_count%2Cip_count%2Cbounce_ratio%2Cavg_visit_time&method=overview%2FgetTimeTrendRpt`);
-            const data = await response.json();
-            const { result } = data;
+            const { data } = await getStatisAPI("overview", date, date);
+            const { result } = data as any;
 
             let pv = 0;
             let ip = 0;
@@ -97,11 +94,16 @@ export default () => {
         <Spin spinning={loading}>
             {/* 基本数据 */}
             <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
-                <CardDataStats title="今日访客" total={stats.pv + ''} rate="0.43%" levelUp>
+                <CardDataStats 
+                    title="今日浏览量" 
+                    total={stats.pv + ''} 
+                    rate="0.43%" 
+                    levelUp
+                >
                     <AiOutlineEye className="fill-primary dark:fill-white text-2xl" />
                 </CardDataStats>
 
-                <CardDataStats title="今日IP" total={stats.ip + ''} rate="0.95%" levelDown>
+                <CardDataStats title="今日访客" total={stats.ip + ''} rate="0.95%" levelDown>
                     <AiOutlineMeh className="fill-primary dark:fill-white text-2xl" />
                 </CardDataStats>
 

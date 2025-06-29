@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';
 import { Spin } from 'antd';
+import { getStatisAPI } from '@/api/Statis';
 
 interface ChartThreeState {
   series: number[];
@@ -13,7 +14,7 @@ const options: ApexOptions = {
     fontFamily: 'Satoshi, sans-serif',
     type: 'donut',
   },
-  colors: ['#91C8EA', '#727cf5'],
+  colors: ['#91C8EA', '#60a5fa'],
   labels: ['新访客', '老访客'],
   legend: {
     show: false,
@@ -64,12 +65,8 @@ export default () => {
     setLoading(true)
 
     try {
-      const siteId = import.meta.env.VITE_BAIDU_TONGJI_SITE_ID;
-      const token = import.meta.env.VITE_BAIDU_TONGJI_ACCESS_TOKEN;
-
-      const response = await fetch(`/baidu/rest/2.0/tongji/report/getData?access_token=${token}&site_id=${siteId}&start_date=${date}&end_date=${date}&metrics=new_visitor_count%2Cnew_visitor_ratio&method=trend%2Ftime%2Fa&gran=day&area=`);
-      const data = await response.json();
-      const { result } = data;
+      const { data } = await getStatisAPI("new-visitor", date, date);
+      const { result } = data as any;
 
       const newVisitors = result.items[1][0][1] !== "--" ? result.items[1][0][1] : 0
       const oldVisitors = result.items[1][0][1] !== "--" ? 100 - result.items[1][0][1] : 0
@@ -88,7 +85,7 @@ export default () => {
   }, [])
 
   return (
-    <div className="sm:px-7.5 col-span-12 rounded-lg border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
+    <div className="sm:px-7.5 col-span-12 rounded-2xl border border-stroke bg-light-gradient dark:bg-dark-gradient px-5 pb-5 pt-7.5 shadow-default dark:border-transparent xl:col-span-4">
       <Spin spinning={loading}>
         <div className="mb-3 justify-between gap-4 sm:flex">
           <div>
@@ -117,7 +114,7 @@ export default () => {
 
           <div className="sm:w-1/2 w-full px-8">
             <div className="flex w-full items-center">
-              <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#727cf5]"></span>
+              <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#60a5fa]"></span>
               <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
                 <span> 老访客 </span>
                 <span> {result.oldVisitors.toFixed(2)}% </span>

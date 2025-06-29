@@ -10,6 +10,7 @@ import type { Cate } from '@/types/app/cate';
 import type { Article } from '@/types/app/article';
 
 import { useWebStore } from '@/stores';
+import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
 
 export default () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -101,11 +102,11 @@ export default () => {
             render: (_: string, record: Article) => (
                 <div className='flex justify-center space-x-2'>
                     <Link to={`/create?id=${record.id}&draft=true`}>
-                        <Button>编辑</Button>
+                        <Button icon={<FormOutlined />} />
                     </Link>
 
                     <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delArticleData(record.id!)}>
-                        <Button type="primary" danger>删除</Button>
+                        <Button type="primary" danger icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </div>
             ),
@@ -116,7 +117,7 @@ export default () => {
         <div>
             <Title value="草稿箱" />
 
-            <Card className={`${titleSty} mt-2 min-h-[calc(100vh-180px)]`}>
+            <Card className={`${titleSty} mt-2 min-h-[calc(100vh-160px)]`}>
                 <Table
                     rowKey="id"
                     dataSource={articleList}

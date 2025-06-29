@@ -30,7 +30,7 @@ function App() {
   const getWebData = async () => {
     if (!token) return;
     const { data } = await getConfigDataAPI<Web>('web');
-    console.log(data,9999);
+    console.log(data, 9999);
     setWeb(data);
   };
 
@@ -64,7 +64,7 @@ function App() {
       locale={zhCN}
       theme={{
         token: {
-          colorPrimary: '#727cf5',
+          colorPrimary: '#60a5fa',
           colorBgBase: isDarkTheme ? '#24303F' : '#ffffff',
           colorTextBase: isDarkTheme ? '#e0e0e0' : '#000000',
         },

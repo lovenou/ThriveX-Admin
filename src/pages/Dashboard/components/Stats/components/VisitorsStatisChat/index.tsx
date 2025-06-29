@@ -3,6 +3,7 @@ import { Spin } from 'antd';
 import { ApexOptions } from 'apexcharts';
 import ReactApexChart from 'react-apexcharts';
 import dayjs from 'dayjs';
+import { getStatisAPI } from '@/api/Statis';
 
 interface Result {
     timeSpan: string[];
@@ -34,8 +35,8 @@ export default () => {
 
     const [result, setResult] = useState<Result | null>(null);
     const [scope, setScope] = useState<"day" | "month" | "year">("day");
-    const [startDate, setStartDate] = useState(dayjs(new Date()).subtract(7, "day").format("YYYY/MM/DD"));
-    const endDate = dayjs(new Date()).format("YYYY/MM/DD");
+    const [startDate, setStartDate] = useState(dayjs(new Date()).subtract(7, "day").format("YYYYMMDD"));
+    const endDate = dayjs(new Date()).format("YYYYMMDD");
 
     // 图表相关配置
     const [options, setOptions] = useState<ApexOptions>({
@@ -44,7 +45,7 @@ export default () => {
             position: 'top',
             horizontalAlign: 'left',
         },
-        colors: ['#3C50E0', '#80CAEE'],
+        colors: ['#60a5fa', '#80CAEE'],
         chart: {
             fontFamily: 'Satoshi, sans-serif',
             height: 335,
@@ -101,7 +102,7 @@ export default () => {
         markers: {
             size: 4,
             colors: '#fff',
-            strokeColors: ['#3056D3', '#80CAEE'],
+            strokeColors: ['#60a5fa', '#80CAEE'],
             strokeWidth: 3,
             strokeOpacity: 0.9,
             strokeDashArray: 0,
@@ -135,11 +136,11 @@ export default () => {
     const [state, setState] = useState<ChartOneState>({
         series: [
             {
-                name: '访客数量',
+                name: '浏览量',
                 data: [],
             },
             {
-                name: 'IP数量',
+                name: '访客',
                 data: [],
             },
         ],
@@ -150,12 +151,8 @@ export default () => {
         try {
             setLoading(true)
 
-            const siteId = import.meta.env.VITE_BAIDU_TONGJI_SITE_ID;
-            const token = import.meta.env.VITE_BAIDU_TONGJI_ACCESS_TOKEN;
-
-            const response = await fetch(`/baidu/rest/2.0/tongji/report/getData?access_token=${token}&site_id=${siteId}&start_date=${startDate}&end_date=${endDate}&metrics=pv_count%2Cip_count&method=overview%2FgetTimeTrendRpt`);
-            const data = await response.json();
-            const { result } = data;
+            const { data } = await getStatisAPI("basic-overview", startDate, endDate);
+            const { result } = data as any;
             setResult(result);
 
             setLoading(false);
@@ -266,7 +263,7 @@ export default () => {
     // 当数据发生变化时，更新图表选项和状态
     useEffect(() => {
         setLoading(true)
-        
+
         setOptions((data) => ({
             ...data,
             xaxis: { ...options.xaxis, categories: scopeData.categories || [] }
@@ -276,11 +273,11 @@ export default () => {
             ...prevState,
             series: [
                 {
-                    name: '访客数量',
+                    name: '浏览量',
                     data: scopeData.series[0] || 0,
                 },
                 {
-                    name: 'IP数量',
+                    name: '访客',
                     data: scopeData.series[1] || 0,
                 },
             ],
@@ -307,7 +304,7 @@ export default () => {
     };
 
     return (
-        <div className="col-span-12 rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+        <div className="col-span-12 rounded-2xl border border-stroke px-5 pt-7.5 pb-5 shadow-default dark:border-transparent bg-light-gradient dark:bg-dark-gradient sm:px-7.5 xl:col-span-8">
             <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
                 <div className="flex w-full flex-wrap gap-3 sm:gap-5">
                     <div className="flex min-w-47.5">

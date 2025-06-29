@@ -15,7 +15,6 @@ import Swiper from '@/pages/Swiper';
 import Footprint from '@/pages/Footprint';
 import User from '@/pages/User';
 import Setup from '@/pages/Setup';
-import Rss from '@/pages/Rss';
 import File from "@/pages/File";
 import Iterative from '@/pages/Iterative';
 import Page from '@/pages/Route';
@@ -36,12 +35,13 @@ import { getRoleRouteListAPI } from "@/api/Role";
 import { checkTokenAPI } from '@/api/User'
 import { Route as RouteType } from "@/types/app/route";
 import NotFound from "../NotFound";
+import Auth from "@/pages/Auth";
 
 export default () => {
     const navigate = useNavigate();
     const store = useUserStore();
     const { pathname } = useLocation();
-    const isLoginRoute = pathname === '/login';
+    const isLoginRoute = pathname === '/login' || pathname === '/auth';
 
     const routesAll = [
         { path: "/", title: "仪表盘", component: <Home /> },
@@ -64,7 +64,6 @@ export default () => {
         { path: "/setup", title: "项目配置", component: <Setup /> },
         { path: "/route", title: "路由配置", component: <Page /> },
         { path: "/role", title: "角色管理", component: <Role /> },
-        { path: "/rss", title: "订阅中心", component: <Rss /> },
         { path: "/file", title: "文件管理", component: <File /> },
         { path: "/iter", title: "项目更新记录", component: <Iterative /> },
         { path: "/work", title: "工作台", component: <Work /> },
@@ -80,10 +79,10 @@ export default () => {
     };
 
     useEffect(() => {
-        // 如果没有token就跳转到登录页
-        if (!store.token) return navigate("/login")
+        // 如果没有token并且不在登录相关页面就跳转到登录页
+        if (!store.token && !isLoginRoute) return navigate("/login")
         if (store.role.id) getRouteList(store.role.id)
-    }, [store]);
+    }, [store, isLoginRoute]);
 
     useEffect(() => {
         if (store.token) checkTokenAPI(store.token)
@@ -101,6 +100,13 @@ export default () => {
                         </>
                     }
                 />
+
+                <Route path="/auth" element={
+                    <>
+                        <PageTitle title="ThriveX | 第三方登录" />
+                        <Auth />
+                    </>
+                } />
             </Routes>
         );
     }
