@@ -197,7 +197,7 @@ export default () => {
         <div>
             <Title value='文件管理' />
 
-            <Card className='FilePage mt-2 min-h-[calc(100vh-180px)]'>
+            <Card className='FilePage mt-2 min-h-[calc(100vh-160px)]'>
                 <div className='flex justify-between mb-4 px-4'>
                     {
                         !fileList.length && !dirName
@@ -231,7 +231,7 @@ export default () => {
                                             fileList.map((item, index) =>
                                                 <div
                                                     key={index}
-                                                    className={`group relative overflow-hidden rounded-md cursor-pointer mb-4 border-2 border-[#eee] dark:border-transparent hover:!border-primary p-1 ${file.url === item.url ? 'border-primary' : 'border-gray-100'}`}
+                                                    className={`group relative overflow-hidden rounded-md cursor-pointer mb-4 border-2 border-stroke dark:border-transparent hover:!border-primary p-1 ${file.url === item.url ? 'border-primary' : 'border-gray-100'}`}
                                                     onClick={() => viewOpenFileInfo(item)}>
 
                                                     <Image

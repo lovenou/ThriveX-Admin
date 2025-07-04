@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { notification, Divider, Input, Alert, Button, Form, Checkbox } from 'antd';
 import { PictureOutlined, CloudUploadOutlined } from '@ant-design/icons';
-import { editConfigDataAPI, getConfigDataAPI } from '@/api/Project';
-import { Theme } from '@/types/app/project';
+import { editWebConfigDataAPI, getWebConfigDataAPI } from '@/api/Config';
+import { Theme } from '@/types/app/config';
 import Material from '@/components/Material';
 
 export default () => {
@@ -19,7 +19,7 @@ export default () => {
         try {
             setLoading(true);
 
-            const { data } = await getConfigDataAPI<Theme>("layout");
+            const { data } = await getWebConfigDataAPI<Theme>("layout");
             setTheme(data);
 
             form.setFieldsValue({
@@ -54,7 +54,7 @@ export default () => {
                 reco_article: JSON.stringify(values.reco_article.split('\n')),
             };
 
-            await editConfigDataAPI("layout", updatedLayout);
+            await editWebConfigDataAPI("layout", updatedLayout);
 
             notification.success({
                 message: '成功',
@@ -180,7 +180,7 @@ export default () => {
                     <div className='overflow-auto w-full'>
                         <div className="article flex w-[650px]">
                             {['classics', 'card', 'waterfall'].map((item) => (
-                                <div key={item} onClick={() => setTheme({ ...theme, is_article_layout: item })} className={`item flex flex-col items-center p-4 m-4 border-2 rounded cursor-pointer ${theme.is_article_layout === item ? 'border-primary' : 'border-[#eee]'}`}>
+                                <div key={item} onClick={() => setTheme({ ...theme, is_article_layout: item })} className={`item flex flex-col items-center p-4 m-4 border-2 rounded cursor-pointer ${theme.is_article_layout === item ? 'border-primary' : 'border-stroke'}`}>
                                     <p className={`text-center ${theme.is_article_layout === item ? 'text-primary' : ''}`}>
                                         {item === 'classics' ? '经典布局' : item === 'card' ? '卡片布局' : '瀑布流布局'}
                                     </p>

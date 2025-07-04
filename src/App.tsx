@@ -6,9 +6,9 @@ import { ConfigProvider, theme } from 'antd';
 import RouteList from './components/RouteList';
 import '@/styles/customAntd.scss';
 
-import { getConfigDataAPI } from '@/api/Project';
+import { getWebConfigDataAPI } from '@/api/Config';
 import { useWebStore, useUserStore } from './stores';
-import { Web } from './types/app/project';
+import { Web } from './types/app/config';
 
 import zhCN from 'antd/locale/zh_CN';
 import 'dayjs/locale/zh-cn';
@@ -29,8 +29,8 @@ function App() {
   const setWeb = useWebStore((state) => state.setWeb);
   const getWebData = async () => {
     if (!token) return;
-    const { data } = await getConfigDataAPI<Web>('web');
-    console.log(data,9999);
+    const { data } = await getWebConfigDataAPI<Web>('web');
+    console.log(data, 9999);
     setWeb(data);
   };
 
@@ -64,7 +64,7 @@ function App() {
       locale={zhCN}
       theme={{
         token: {
-          colorPrimary: '#727cf5',
+          colorPrimary: '#60a5fa',
           colorBgBase: isDarkTheme ? '#24303F' : '#ffffff',
           colorTextBase: isDarkTheme ? '#e0e0e0' : '#000000',
         },

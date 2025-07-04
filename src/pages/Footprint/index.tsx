@@ -8,8 +8,9 @@ import { GiPositionMarker } from "react-icons/gi";
 import { IoSearch } from "react-icons/io5";
 import dayjs from 'dayjs';
 import axios from 'axios';
-import { CloudUploadOutlined } from '@ant-design/icons';
+import { CloudUploadOutlined, DeleteOutlined, FormOutlined } from '@ant-design/icons';
 import Material from '@/components/Material';
+import { getEnvConfigDataAPI } from '@/api/Config';
 
 export default () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -17,6 +18,7 @@ export default () => {
   const [btnLoading, setBtnLoading] = useState(false)
   const [editLoading, setEditLoading] = useState(false)
 
+  const [gaodeApKey, setGaodeApKey] = useState<string>('');
   const [footprintList, setFootprintList] = useState<Footprint[]>([]);
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false);
@@ -79,9 +81,9 @@ export default () => {
       align: 'center',
       render: (_: string, record: Footprint) => (
         <div className='flex space-x-2'>
-          <Button onClick={() => editFootprintData(record.id!)}>修改</Button>
+          <Button onClick={() => editFootprintData(record.id!)} icon={<FormOutlined />} />
           <Popconfirm title="警告" description="你确定要删除吗" okText="确定" cancelText="取消" onConfirm={() => delFootprintData(record.id!)}>
-            <Button type="primary" danger>删除</Button>
+            <Button type="primary" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       ),
@@ -89,6 +91,12 @@ export default () => {
   ];
 
   const { RangePicker } = DatePicker;
+
+  // 获取高德地图秘钥
+  const getEnvConfigData = async () => {
+    const { data } = await getEnvConfigDataAPI('gaode_coordinate');
+    setGaodeApKey(data.value.key)
+  }
 
   const getFootprintList = async () => {
     try {
@@ -103,6 +111,7 @@ export default () => {
 
   useEffect(() => {
     setLoading(true);
+    getEnvConfigData()
     getFootprintList();
   }, []);
 
@@ -211,7 +220,7 @@ export default () => {
       const { data } = await axios.get('https://restapi.amap.com/v3/geocode/geo', {
         params: {
           address,
-          key: import.meta.env.VITE_GAODE_WEB_API
+          key: gaodeApKey
         }
       });
 
@@ -294,7 +303,7 @@ export default () => {
                 />
               </Form.Item>
 
-              <div onClick={() => setIsMaterialModalOpen(true)} className='absolute bottom-2 right-2 bg-white rounded-full border border-[#eee] cursor-pointer'>
+              <div onClick={() => setIsMaterialModalOpen(true)} className='absolute bottom-2 right-2 bg-white rounded-full border border-stroke cursor-pointer'>
                 <CloudUploadOutlined className='text-xl hover:text-primary transition-colors p-2' />
               </div>
             </div>

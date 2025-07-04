@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form, Input, Button, message, DatePicker } from 'antd';
-import { editConfigDataAPI } from '@/api/Project';
-import { Web } from '@/types/app/project'
+import { editWebConfigDataAPI } from '@/api/Config';
+import { Web } from '@/types/app/config'
 import { useWebStore } from '@/stores';
 import dayjs from 'dayjs';
 
@@ -29,7 +29,7 @@ export default () => {
                 create_time: values.create_time ? values.create_time.valueOf() : undefined
             };
 
-            await editConfigDataAPI("web", submitData);
+            await editWebConfigDataAPI("web", submitData);
             message.success("🎉 编辑网站成功");
             setWeb(submitData);
             
@@ -63,7 +63,7 @@ export default () => {
                     name="title"
                     rules={[{ required: true, message: '网站名称不能为空' }]}
                 >
-                    <Input placeholder="Thrive" />
+                    <Input placeholder="ThriveX" />
                 </Form.Item>
 
                 <Form.Item

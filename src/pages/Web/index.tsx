@@ -121,7 +121,7 @@ export default () => {
         return !value || /^(https?:\/\/)/.test(value) ? Promise.resolve() : Promise.reject(new Error('请输入有效的链接'));
     };
 
-    const submit = async () => {
+    const onSubmit = async () => {
         try {
             setBtnLoading(true)
 
@@ -229,9 +229,9 @@ export default () => {
 
                     <Spin spinning={editLoading}>
                         <div className='w-full md:w-[500px] mx-auto'>
-                            <Form form={form} layout="vertical" size='large' initialValues={link} onFinish={submit}>
+                            <Form form={form} layout="vertical" size='large' initialValues={link} onFinish={onSubmit}>
                                 <Form.Item label="网站标题" name="title" rules={[{ required: true, message: '网站标题不能为空' }]}>
-                                    <Input placeholder="Thrive" />
+                                    <Input placeholder="ThriveX" />
                                 </Form.Item>
 
                                 <Form.Item label="网站描述" name="description" rules={[{ required: true, message: '网站描述不能为空' }]}>
@@ -279,7 +279,7 @@ export default () => {
         <div>
             <Title value="网站管理" />
 
-            <Card className="WebPage mt-2 min-h-[calc(100vh-180px)]">
+            <Card className="WebPage mt-2 min-h-[calc(100vh-160px)]">
                 <Tabs activeKey={tab} tabPosition="top" onChange={handleTabChange} items={tabItems} />
             </Card>
         </div>

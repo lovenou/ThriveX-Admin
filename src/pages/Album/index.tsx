@@ -314,7 +314,7 @@ export default () => {
     <div>
       <Title value="相册管理" />
 
-      <Card className="AlbumPage mt-2 min-h-[calc(100vh-180px)]">
+      <Card className="AlbumPage mt-2 min-h-[calc(100vh-160px)]">
         <div className="flex justify-between mb-4 px-4">
           {!imageList.length && !currentAlbum.id ? (
             <PiKeyReturnFill className="text-4xl text-[#E0DFDF] cursor-pointer" />
@@ -360,7 +360,7 @@ export default () => {
                 {imageList.map((item, index) => (
                   <div
                     key={index}
-                    className={`group relative overflow-hidden rounded-md cursor-pointer mb-4 border-2 border-[#eee] dark:border-transparent hover:!border-primary p-1 ${currentImage.id === item.id
+                    className={`group relative overflow-hidden rounded-md cursor-pointer mb-4 border-2 border-stroke dark:border-transparent hover:!border-primary p-1 ${currentImage.id === item.id
                         ? 'border-primary'
                         : 'border-gray-100'
                       }`}

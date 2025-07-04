@@ -15,7 +15,6 @@ import Swiper from '@/pages/Swiper';
 import Footprint from '@/pages/Footprint';
 import User from '@/pages/User';
 import Setup from '@/pages/Setup';
-import Rss from '@/pages/Rss';
 import File from "@/pages/File";
 import Iterative from '@/pages/Iterative';
 import Page from '@/pages/Route';
@@ -28,6 +27,7 @@ import Record from "@/pages/Record";
 import Oss from "@/pages/Oss";
 import Album from "@/pages/Album";
 import Assistant from "@/pages/Assistant";
+import Config from "@/pages/Config";
 
 import PageTitle from "../PageTitle";
 
@@ -41,7 +41,7 @@ export default () => {
     const navigate = useNavigate();
     const store = useUserStore();
     const { pathname } = useLocation();
-    const isLoginRoute = pathname === '/login';
+    const isLoginRoute = pathname === '/login' || pathname === '/auth';
 
     const routesAll = [
         { path: "/", title: "仪表盘", component: <Home /> },
@@ -64,11 +64,11 @@ export default () => {
         { path: "/setup", title: "项目配置", component: <Setup /> },
         { path: "/route", title: "路由配置", component: <Page /> },
         { path: "/role", title: "角色管理", component: <Role /> },
-        { path: "/rss", title: "订阅中心", component: <Rss /> },
         { path: "/file", title: "文件管理", component: <File /> },
         { path: "/iter", title: "项目更新记录", component: <Iterative /> },
         { path: "/work", title: "工作台", component: <Work /> },
         { path: "/assistant", title: "助手管理", component: <Assistant /> },
+        { path: "/config", title: "环境配置", component: <Config /> },
     ];
 
     const [routes, setRoutes] = useState<typeof routesAll | null>(null);
@@ -80,10 +80,10 @@ export default () => {
     };
 
     useEffect(() => {
-        // 如果没有token就跳转到登录页
-        if (!store.token) return navigate("/login")
+        // 如果没有token并且不在登录相关页面就跳转到登录页
+        if (!store.token && !isLoginRoute) return navigate("/login")
         if (store.role.id) getRouteList(store.role.id)
-    }, [store]);
+    }, [store, isLoginRoute]);
 
     useEffect(() => {
         if (store.token) checkTokenAPI(store.token)
@@ -116,7 +116,7 @@ export default () => {
                         path={path}
                         element={
                             <>
-                                <PageTitle title={`Thrive - ${title}`} />
+                                <PageTitle title={`ThriveX - ${title}`} />
                                 {component}
                             </>
                         }
